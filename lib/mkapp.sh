@@ -41,8 +41,8 @@ mkapp() {
   else
     
     # delete stuff
-    __mkapp_unlink_vhosts || return 1
-    __mkapp_delete_app || return 1
+    __mkapp_delete_app
+    __mkapp_unlink_vhosts
     __mkapp_reload_apache || return 1
   fi
 }
