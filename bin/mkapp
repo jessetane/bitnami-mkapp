@@ -1,0 +1,9 @@
+#
+# mkapp exe
+#
+
+cd "$(dirname "$BASH_SOURCE")"
+
+source ../lib/mkapp.sh
+
+mkapp "$@"
