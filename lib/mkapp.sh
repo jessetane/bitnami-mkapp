@@ -69,12 +69,12 @@ __mkapp_create_vhosts() {
       Require all granted
     </IfVersion>
   </Directory>
-</VirtualHost>" | sudo tee -a "$home"/conf/httpd.conf
+</VirtualHost>" | sudo tee -a "$home"/conf/httpd.conf > /dev/null
   done
 }
 
 __mkapp_link_vhosts() {
-  echo -e "Include \"$home/conf/httpd.conf\"" | sudo tee -a "$STACK"/apache2/conf/httpd.conf
+  echo -e "Include \"$home/conf/httpd.conf\"" | sudo tee -a "$STACK"/apache2/conf/httpd.conf > /dev/null
 }
 
 __mkapp_unlink_vhosts() {
