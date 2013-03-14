@@ -5,6 +5,9 @@
 
 mkapp() {
   
+  # own dir
+  cd "$(dirname "$BASH_SOURCE")"
+  
   # settings
   STACK="/opt/bitnami"
   
