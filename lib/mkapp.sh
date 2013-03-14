@@ -52,7 +52,7 @@ __mkapp_create_dirs() {
 __mkapp_create_vhosts() {
   for name in "${names[@]}"
   do
-    sudo echo "<VirtualHost *:*>
+    echo "<VirtualHost *:*>
   DocumentRoot $home/htdocs
   ServerName $name
   <Directory $home/htdocs>
@@ -66,12 +66,12 @@ __mkapp_create_vhosts() {
       Require all granted
     </IfVersion>
   </Directory>
-</VirtualHost>" >> "$home"/conf/httpd.conf
+</VirtualHost>" | sudo tee -a "$home"/conf/httpd.conf
   done
 }
 
 __mkapp_link_vhosts() {
-  sudo echo -e "Include \"$home/conf/httpd.conf\"" >> "$STACK"/apache2/conf/httpd.conf
+  echo -e "Include \"$home/conf/httpd.conf\"" | sudo tee -a "$STACK"/apache2/conf/httpd.conf
 }
 
 __mkapp_unlink_vhosts() {
