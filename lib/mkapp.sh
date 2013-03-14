@@ -78,7 +78,8 @@ __mkapp_link_vhosts() {
 }
 
 __mkapp_unlink_vhosts() {
-  sudo sed -i "/Include \"$home\/conf\/httpd.conf\"/d" "$STACK"/apache2/conf/httpd.conf
+  line="$(cat "$STACK"/apache2/conf/httpd.conf | grep -n "Include \"$home/conf/httpd.conf\"" | sed "s/\(.*\):Include.*/\1/")"
+  sed -i "${line}d;" "$STACK"/apache2/conf/httpd.conf
 }
 
 __mkapp_chown_app() {
