@@ -2,8 +2,8 @@
 # mkapp exe
 #
 
-cd "$(dirname "$BASH_SOURCE")"
+dir="$(cd "$(dirname "$BASH_SOURCE")" && pwd)"/..
 
-source ../lib/mkapp.sh
+source "$dir"/lib/mkapp.sh
 
 mkapp "$@"
