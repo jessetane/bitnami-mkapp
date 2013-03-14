@@ -1,7 +1,8 @@
 # bitnami-mkapp
+Quick apache vhost setup
 
 ## Why
-Quick apache vhost setup
+Notes to remember how to do this
 
 ## How
 Bash script
