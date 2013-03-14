@@ -14,7 +14,6 @@ mkapp() {
   local home="$STACK"/apps/"$app"
   
   # sanity checks
-  [ "$(whoami)" != "root" ] && echo "you must be root (sudo)" >&2 && return 1
   [ -z "$app" ] && echo "please specify an app name" >&2 && return 1
   [ -d "$home" ] && echo "cannot create $app: app exists" >&2 && return 1
   
@@ -27,14 +26,14 @@ mkapp() {
 }
 
 __mkapp_create_dirs() {
-  mkdir -p "$home"/conf
-  mkdir -p "$home"/htdocs
+  sudo mkdir -p "$home"/conf
+  sudo mkdir -p "$home"/htdocs
 }
 
 __mkapp_create_vhosts() {
   for name in "${names[@]}"
   do
-    echo "<VirtualHost *:*>
+    sudo echo "<VirtualHost *:*>
   DocumentRoot $home/htdocs
   ServerName $name
   <Directory $home/htdocs>
@@ -53,13 +52,13 @@ __mkapp_create_vhosts() {
 }
 
 __mkapp_link_vhosts() {
-  echo -e "Include \"$home/conf/httpd.conf\"" >> "$STACK"/apache2/conf/httpd.conf
+  sudo echo -e "Include \"$home/conf/httpd.conf\"" >> "$STACK"/apache2/conf/httpd.conf
 }
 
 __mkapp_chown_app() {
-  chown -R bitnami:bitnami "$home"
+  sudo chown -R bitnami:bitnami "$home"
 }
 
 __mkapp_reload_apache() {
-  "$STACK"/ctlscript.sh restart apache
+  sudo "$STACK"/ctlscript.sh restart apache
 }
