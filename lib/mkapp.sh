@@ -6,23 +6,42 @@
 mkapp() {
   
   # settings
-  local STACK="/opt/bitnami"
+  STACK="/opt/bitnami"
   
   # vars
-  local app="$1"
-  local names=("$@")
-  local home="$STACK"/apps/"$app"
+  app="$1"
+  names=("$@")
+  home="$STACK"/apps/"$app"
+  
+  # dep
+  source argue/0.0.1/lib/argue.sh
+  
+  # options
+  args=("$@")
+  argue "-d, --delete" || return 1
   
   # sanity checks
   [ -z "$app" ] && echo "please specify an app name" >&2 && return 1
-  [ -d "$home" ] && echo "cannot create $app: app exists" >&2 && return 1
   
-  # do stuff
-  __mkapp_create_dirs || return 1
-  __mkapp_create_vhosts || return 1
-  __mkapp_link_vhosts || return 1
-  __mkapp_chown_app || return 1
-  __mkapp_reload_apache || return 1
+  if [ -z "${opts[0]}" ]
+  then
+    
+    # sanity
+    [ -d "$home" ] && echo "cannot create $app: app exists" >&2 && return 1
+  
+    # create stuff
+    __mkapp_create_dirs || return 1
+    __mkapp_create_vhosts || return 1
+    __mkapp_link_vhosts || return 1
+    __mkapp_chown_app || return 1
+    __mkapp_reload_apache || return 1
+  else
+    
+    # delete stuff
+    __mkapp_unlink_vhosts || return 1
+    __mkapp_delete_app || return 1
+    __mkapp_reload_apache || return 1
+  fi
 }
 
 __mkapp_create_dirs() {
@@ -55,8 +74,16 @@ __mkapp_link_vhosts() {
   sudo echo -e "Include \"$home/conf/httpd.conf\"" >> "$STACK"/apache2/conf/httpd.conf
 }
 
+__mkapp_unlink_vhosts() {
+  sudo sed -i "/Include \"$home\/conf\/httpd.conf\"/d" "$STACK"/apache2/conf/httpd.conf
+}
+
 __mkapp_chown_app() {
   sudo chown -R bitnami:bitnami "$home"
+}
+
+__mkapp_delete_app() {
+  sudo rm -rf "$home"
 }
 
 __mkapp_reload_apache() {
