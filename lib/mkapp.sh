@@ -11,11 +11,6 @@ mkapp() {
   # settings
   STACK="/opt/bitnami"
   
-  # vars
-  app="$1"
-  names=("$@")
-  home="$STACK"/apps/"$app"
-  
   # dep
   source argue/0.0.1/lib/argue.sh
   
@@ -23,7 +18,12 @@ mkapp() {
   args=("$@")
   argue "-d, --delete" || return 1
   
-  # sanity checks
+  # vars
+  app="${args[0]}"
+  names=("${args[@]}")
+  home="$STACK"/apps/"$app"
+  
+  # sanity
   [ -z "$app" ] && echo "please specify an app name" >&2 && return 1
   
   if [ -z "${opts[0]}" ]
