@@ -9,7 +9,7 @@ mkapp() {
   STACK="/opt/bitnami"
   
   # dep
-  source argue.sh || return 1
+  source libargue.sh || return 1
   
   # options
   args=("$@")
